@@ -8,7 +8,6 @@ class HomeViewModelFactory(
     private val categoryRepository: CategoryRepository
 ): ViewModelProvider.Factory{
     override fun <T: ViewModel> create(
-        //Representa una instancia de la clase de ViewModel
         modelClass: Class<T>
     ):T{
         if(modelClass.isAssignableFrom(HomeViewModel::class.java)){

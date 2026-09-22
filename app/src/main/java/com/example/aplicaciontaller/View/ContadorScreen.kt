@@ -9,16 +9,16 @@ import com.example.aplicaciontaller.ViewModel.ContadorViewModel
 
 @Composable
 fun ContadorScreen(
-    viewModel: ContadorViewModel, modifier: Modifier = Modifier
+    viewModel: ContadorViewModel,
+    modifier: Modifier = Modifier
 ){
     Column(
         modifier = modifier
     ){
-        //Este es el de mutableStateOf
-        Text(text = "Contador:  ${viewModel.contador}")
+        Text(text="Contador ${viewModel.contador}")
+
         Button(
             onClick = {
-                //este es el de private set
                 viewModel.incrementar()
             }
         ) {

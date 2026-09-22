@@ -13,31 +13,31 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarColors
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collection.mutableVectorOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import com.example.aplicaciontaller.ui.theme.Green1
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.aplicaciontaller.R
-import com.example.aplicaciontaller.ui.theme.Green1
 
 @Composable
-fun Title(text: String){
-    Text(text= text, fontSize=25.sp, color = Green1, fontWeight = FontWeight.Bold)
+fun Title(text:String){
+    Text(text=text, fontSize=25.sp, color = Green1, fontWeight = FontWeight.Bold)
 }
 
 @Composable
-fun CartButton(){
+fun CartButton(onClick: () -> Unit = {}) {
     FloatingActionButton(
-        onClick = {},
+        onClick = onClick,
         containerColor = MaterialTheme.colorScheme.primary
     ) {
         Icon(
@@ -46,22 +46,24 @@ fun CartButton(){
         )
     }
 }
-
 @Composable
 fun MainScaffold(
-    selectedItem: Int,
-    onItemSelected: (Int) -> Unit,
-    topBar: @Composable () -> Unit = {},
-    floatingActionButton: @Composable ()-> Unit = {},
+    selectedItem:Int,
+    onItemSelected:(Int) -> Unit,
+    topBar:@Composable () -> Unit ={},
+    floatingActionButton: @Composable () -> Unit  = {},
+    showBottomBar: Boolean=true,
     content: @Composable (PaddingValues) -> Unit
 ){
     Scaffold(
-        topBar = topBar,
+        topBar=topBar,
         bottomBar = {
-            BotomMenu(
-                selectedItem = selectedItem,
-                onItemSelected = onItemSelected
-            )
+            if(showBottomBar){
+                BottomMenu(
+                    selectedItem = selectedItem,
+                    onItemSelected = onItemSelected
+                )
+            }
         },
         floatingActionButton = floatingActionButton,
         content = content
@@ -73,8 +75,8 @@ fun MainScaffold(
 fun SearchBarComponent(){
     //Almacenar texto escrito
     var query by remember { mutableStateOf("") }
-    //Indicar si la barra de búsqueda está activa
-    var activa by remember { mutableStateOf(false)}
+    //Indicar si la barra de busqueda está activa
+    var activa by remember { mutableStateOf(false) }
     SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
@@ -88,42 +90,45 @@ fun SearchBarComponent(){
                 onSearch = {
                     activa = false
                 },
-                expanded = activa,
+                expanded=activa,
                 onExpandedChange = {
                     activa = it
                 },
-                //TExto de fondo
+                //Texto de fondo
                 placeholder = {
-                    Text("Buscar vehículos, marcas...")
+                    Text("Buscar productos...")
                 },
-                //Definir icono
+                //definir icono
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Buscar"
                     )
                 },
-                //Icono para cerrar la busqueda
+                //Icono para cerrar la búsqueda
                 trailingIcon = {
-                    IconButton(
-                        onClick = {
-                            if(query.isNotEmpty()){
-                                query = ""
-                            } else {
-                                activa = false
+                    if(activa){
+                        IconButton(
+                            onClick = {
+                                if(query.isNotEmpty()){
+                                    query=""
+                                }else{
+                                    activa=false
+                                }
                             }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription="Cerrar"
+                            )
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Cerrar"
-                        )
                     }
                 }
             )
         },
         //Estado de expansión
-        expanded = activa,
+        expanded=activa,
+
         onExpandedChange = {
             activa = it
         },
@@ -139,7 +144,8 @@ fun SearchBarComponent(){
         //Elevacion
         tonalElevation = SearchBarDefaults.TonalElevation,
         shadowElevation = SearchBarDefaults.ShadowElevation,
-        //Contenido con la barra expandida
+
+        //Contenido con la barra expandida.
         content = {
             Text(
                 text = "Buscando: $query",

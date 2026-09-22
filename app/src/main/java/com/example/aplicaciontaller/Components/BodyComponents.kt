@@ -1,6 +1,8 @@
 package com.example.aplicaciontaller.Components
 
+import android.widget.Space
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsEndWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.ButtonDefaults
@@ -33,9 +36,7 @@ import com.example.aplicaciontaller.ui.theme.Green1
 import com.example.aplicaciontaller.ui.theme.ultra_l_blue
 
 @Composable
-fun CardViewHome(
-    title: String, description: String, buttonText: String, image: Int
-){
+fun CardViewHome(title: String,description: String, buttonText: String, image: Int){
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 8.dp
@@ -52,7 +53,7 @@ fun CardViewHome(
                 .fillMaxWidth()
                 .height(IntrinsicSize.Min),
             verticalAlignment = Alignment.CenterVertically
-        ) {
+        ){
             Column(
                 modifier = Modifier
                     .weight(0.58f)
@@ -131,7 +132,6 @@ fun cardCategoryHome(
         }
     }
 }
-
 @Composable
 fun spaceV(space: Int){
     Spacer(
@@ -145,7 +145,6 @@ fun spaceH(space: Int){
         modifier = Modifier.width(space.dp)
     )
 }
-
 @Preview
 @Composable
 fun cardViewPreview(){

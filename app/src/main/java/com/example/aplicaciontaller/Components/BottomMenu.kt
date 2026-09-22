@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocalOffer
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -34,7 +35,6 @@ fun BotomMenu(
                 Text("Inicio")
             }
         )
-
         NavigationBarItem(
             selected = selectedItem == 1,
             onClick = {
@@ -50,7 +50,6 @@ fun BotomMenu(
                 Text("Ofertas")
             }
         )
-
         NavigationBarItem(
             selected = selectedItem == 2,
             onClick = {
@@ -69,8 +68,9 @@ fun BotomMenu(
                 selectedIconColor = MaterialTheme.colorScheme.primary,
                 unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
-        )
 
+        )
+        //Cuarta opcion: Perfil
         NavigationBarItem(
             selected = selectedItem == 3,
             onClick = {

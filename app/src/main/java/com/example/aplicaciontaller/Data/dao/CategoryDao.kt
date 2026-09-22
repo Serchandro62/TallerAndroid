@@ -9,10 +9,8 @@ import com.example.aplicaciontaller.Data.model.Category
 interface CategoryDao{
     @Query("SELECT * FROM categories")
     suspend fun getCategories(): List<Category>
-
     @Query("SELECT COUNT(*) FROM categories")
     suspend fun countCategories(): Int
-
     @Insert
     suspend fun insertCategories(categories: List<Category>)
 }
