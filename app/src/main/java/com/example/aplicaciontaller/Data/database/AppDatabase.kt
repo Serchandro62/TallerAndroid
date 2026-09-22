@@ -18,7 +18,7 @@ import com.example.aplicaciontaller.Data.model.Product
         Product::class,
         CartItem::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false)
 abstract class AppDatabase(): RoomDatabase(){
     abstract fun categoryDao(): CategoryDao

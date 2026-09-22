@@ -71,10 +71,12 @@ fun ProductCardHome(
             Text(
                 text = buildAnnotatedString {
                     withStyle(style= SpanStyle(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)){
-                        append("$${String.format("%.2f",product.price)}")
+                        append("$${String.format("%,.2f", product.price)}")
                     }
-                    withStyle(style = SpanStyle(color = Color.Gray)){
-                        append("/${product.measure}")
+                    if (product.measure.isNotBlank() && product.measure.lowercase() != "unidad") {
+                        withStyle(style = SpanStyle(color = Color.Gray)){
+                            append("/${product.measure}")
+                        }
                     }
                 },
                 fontSize = 14.sp,
@@ -103,8 +105,8 @@ fun CartProductCard(
     if(showDialog){
         AlertDialog(
             onDismissRequest = {showDialog=false},
-            title = {Text("Eliminar producto")},
-            text = {Text("¿Estás seguro de eliminar los productos?")},
+            title = {Text("Eliminar vehículo")},
+            text = {Text("¿Estás seguro de eliminar este vehículo del carrito?")},
             confirmButton = {
                 TextButton(onClick = {
                     showDialog=false
@@ -146,7 +148,7 @@ fun CartProductCard(
                     fontSize = 16.sp
                 )
                 Text(
-                    text = "$${String.format("%.2f",cartProduct.productId.price)}",
+                    text = "$${String.format("%,.2f",cartProduct.productId.price)}",
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold
                 )

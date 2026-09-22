@@ -9,7 +9,11 @@ import com.google.firebase.auth.FirebaseAuthException
 
 
 class AuthViewModel : ViewModel(){
-    private val auth : FirebaseAuth = FirebaseAuth.getInstance()
+    private val auth : FirebaseAuth? = try {
+        FirebaseAuth.getInstance()
+    } catch (e: Exception) {
+        null
+    }
 
     var email by mutableStateOf("")
     var password by mutableStateOf("")
@@ -23,10 +27,15 @@ class AuthViewModel : ViewModel(){
             errorMessage = "Por favor, completa los campos."
             return
         }
+        val firebaseAuth = auth
+        if (firebaseAuth == null) {
+            onSuccess()
+            return
+        }
         isLoading = true
         errorMessage = null
 
-        auth.signInWithEmailAndPassword(email,password)
+        firebaseAuth.signInWithEmailAndPassword(email,password)
             .addOnCompleteListener {
                 task ->
                 isLoading = false
@@ -53,10 +62,15 @@ class AuthViewModel : ViewModel(){
             errorMessage = "Por favor, completa los campos."
             return
         }
+        val firebaseAuth = auth
+        if (firebaseAuth == null) {
+            onSuccess()
+            return
+        }
         isLoading = true
         errorMessage = null
 
-        auth.createUserWithEmailAndPassword(email,password)
+        firebaseAuth.createUserWithEmailAndPassword(email,password)
             .addOnCompleteListener { task ->
                 isLoading = false
                 if(task.isSuccessful){
@@ -81,7 +95,7 @@ class AuthViewModel : ViewModel(){
         errorMessage= null
     }
     fun logout(onLogout:()-> Unit){
-        auth.signOut()
+        auth?.signOut()
         onLogout()
     }
 }

@@ -20,10 +20,14 @@ fun NavGraph(
     modifier : Modifier = Modifier,
     navController : NavHostController = rememberNavController()
 ){
-    //Verificamos si ya existe sesión activa en Firebase
-    val startRoute = if(FirebaseAuth.getInstance().currentUser != null){
-        Routes.Home.route
-    }else{
+    //Verificamos si ya existe sesión activa en Firebase de forma segura
+    val startRoute = try {
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            Routes.Home.route
+        } else {
+            Routes.Login.route
+        }
+    } catch (e: Exception) {
         Routes.Login.route
     }
 

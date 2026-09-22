@@ -21,13 +21,14 @@ class ProductViewModel(private val repository: ProductRepository): ViewModel() {
 
     private fun checkAndInsertInitialData() {
         viewModelScope.launch {
-            //verificar los datos iniciales, para que en caso de no tener productos, se inserten
+            // verificar los datos iniciales, para que en caso de no tener productos, se inserten los vehículos
             if(repository.getProductCount()==0){
                 val initialProducts = listOf(
-                    Product(name = "Pechuga de Pollo", image = R.drawable.pechuga, price = 85.0f, measure = "kg", isOffer = true),
-                    Product(name = "Leche Entera", image = R.drawable.leche2, price = 25.5f, measure = "und", isOffer = false),
-                    Product(name = "Aguacate Hass", image = R.drawable.aguacate, price = 60.0f, measure = "kg", isOffer = true),
-                    Product(name = "Galletas Marías", image = R.drawable.galletas, price = 15.0f, measure = "pza", isOffer = false)
+                    Product(name = "Camioneta SUV Premium", image = R.drawable.camioneta, price = 485000.0f, measure = "unidad", isOffer = true),
+                    Product(name = "Auto Compacto Urbano", image = R.drawable.compacto, price = 275000.0f, measure = "unidad", isOffer = false),
+                    Product(name = "Todoterreno 4x4 Offroad", image = R.drawable.cuatro_x_cuatro, price = 560000.0f, measure = "unidad", isOffer = true),
+                    Product(name = "Deportivo Turbo GT", image = R.drawable.deportivo, price = 720000.0f, measure = "unidad", isOffer = true),
+                    Product(name = "PickUp Carga Heavy Duty", image = R.drawable.pickup, price = 510000.0f, measure = "unidad", isOffer = false)
                 )
                 initialProducts.forEach { repository.insertProduct(it) }
             }

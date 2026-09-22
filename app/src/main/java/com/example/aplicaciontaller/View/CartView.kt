@@ -80,7 +80,7 @@ fun CartView(onItemSelected: (Int) -> Unit,
         ){
             if(cartProducts.isEmpty()){
                 Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center){
-                    Text(text = "Tu carrito está vacío", fontSize = 18.sp, color = Color.Gray)
+                    Text(text = "No has seleccionado vehículos", fontSize = 18.sp, color = Color.Gray)
                 }
             }else{
                 LazyColumn(modifier = Modifier.weight(1f)) {
@@ -100,7 +100,7 @@ fun CartView(onItemSelected: (Int) -> Unit,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ){
                     Text(text = "Total:", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                    Text(text = "$${String.format("%.2f",total)}", fontSize = 20.sp, fontWeight = FontWeight.Bold,color= MaterialTheme.colorScheme.primary)
+                    Text(text = "$${String.format("%,.2f",total)}", fontSize = 20.sp, fontWeight = FontWeight.Bold,color= MaterialTheme.colorScheme.primary)
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -110,7 +110,7 @@ fun CartView(onItemSelected: (Int) -> Unit,
                 enabled = cartProducts.isNotEmpty(),
                 shape = MaterialTheme.shapes.medium
             ) {
-                Text("Ir a pagar", fontSize = 18.sp, modifier = Modifier.padding(8.dp))
+                Text("Proceder a cotizar", fontSize = 18.sp, modifier = Modifier.padding(8.dp))
             }
         }
     }

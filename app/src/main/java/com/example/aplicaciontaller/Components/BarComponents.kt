@@ -96,7 +96,7 @@ fun SearchBarComponent(){
                 },
                 //Texto de fondo
                 placeholder = {
-                    Text("Buscar productos...")
+                    Text("Buscar vehículos...")
                 },
                 //definir icono
                 leadingIcon = {

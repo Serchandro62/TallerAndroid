@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
-    //alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -57,4 +57,6 @@ dependencies {
     implementation(libs.androidx.room3.runtime)
     ksp(libs.androidx.room3.compiler)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.firebase.auth)
+    implementation(libs.androidx.navigation.compose)
 }

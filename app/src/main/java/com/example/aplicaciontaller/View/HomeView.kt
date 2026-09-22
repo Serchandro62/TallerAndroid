@@ -22,8 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import com.example.aplicaciontaller.Components.Title
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -157,6 +155,43 @@ fun ContentHomeView(
                     categoria = category.name,
                     imagen = category.image,
                     color = category.color
+                )
+                spaceH(6)
+            }
+        }
+        spaceV(16)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Vehículos destacados",
+                textAlign = TextAlign.Start,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "Ver catálogo",
+                textAlign = TextAlign.End,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        spaceV(8)
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            items(products) { product ->
+                ProductCardHome(
+                    product = product,
+                    onAddClick = {
+                        cartViewModel.addToCart(product.id)
+                    }
                 )
                 spaceH(6)
             }
