@@ -18,4 +18,9 @@ class ProductRepository(private val productDao: ProductDao) {
 
     //Conteo total de productos
     suspend fun getProductCount()=productDao.getProductCount()
+
+    //Actualizar estado de favorito
+    suspend fun updateFavoriteStatus(id: Int, isFavorite: Boolean) {
+        productDao.updateFavoriteStatus(id, isFavorite)
+    }
 }

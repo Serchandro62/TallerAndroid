@@ -24,14 +24,20 @@ class ProductViewModel(private val repository: ProductRepository): ViewModel() {
             // verificar los datos iniciales, para que en caso de no tener productos, se inserten los vehículos
             if(repository.getProductCount()==0){
                 val initialProducts = listOf(
-                    Product(name = "Camioneta SUV Premium", image = R.drawable.camioneta, price = 485000.0f, measure = "unidad", isOffer = true),
-                    Product(name = "Auto Compacto Urbano", image = R.drawable.compacto, price = 275000.0f, measure = "unidad", isOffer = false),
-                    Product(name = "Todoterreno 4x4 Offroad", image = R.drawable.cuatro_x_cuatro, price = 560000.0f, measure = "unidad", isOffer = true),
-                    Product(name = "Deportivo Turbo GT", image = R.drawable.deportivo, price = 720000.0f, measure = "unidad", isOffer = true),
-                    Product(name = "PickUp Carga Heavy Duty", image = R.drawable.pickup, price = 510000.0f, measure = "unidad", isOffer = false)
+                    Product(name = "Camioneta SUV Premium", image = R.drawable.camioneta, price = 485000.0f, measure = "unidad", isOffer = true, isFavorite = false),
+                    Product(name = "Auto Compacto Urbano", image = R.drawable.compacto, price = 275000.0f, measure = "unidad", isOffer = false, isFavorite = false),
+                    Product(name = "Todoterreno 4x4 Offroad", image = R.drawable.cuatro_x_cuatro, price = 560000.0f, measure = "unidad", isOffer = true, isFavorite = false),
+                    Product(name = "Deportivo Turbo GT", image = R.drawable.deportivo, price = 720000.0f, measure = "unidad", isOffer = true, isFavorite = false),
+                    Product(name = "PickUp Carga Heavy Duty", image = R.drawable.pickup, price = 510000.0f, measure = "unidad", isOffer = false, isFavorite = false)
                 )
                 initialProducts.forEach { repository.insertProduct(it) }
             }
+        }
+    }
+
+    fun toggleFavorite(product: Product) {
+        viewModelScope.launch {
+            repository.updateFavoriteStatus(product.id, !product.isFavorite)
         }
     }
 }

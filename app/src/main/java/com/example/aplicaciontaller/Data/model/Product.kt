@@ -11,6 +11,7 @@ data class Product (
     val image : Int,
     val price : Float,
     val measure: String, //pzas, kg, und
-    val isOffer: Boolean
+    val isOffer: Boolean,
+    val isFavorite: Boolean = false
 )
 

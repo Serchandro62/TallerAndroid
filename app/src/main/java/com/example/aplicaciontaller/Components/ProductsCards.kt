@@ -1,19 +1,28 @@
 package com.example.aplicaciontaller.Components
 
-import android.R
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -30,65 +39,93 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.aplicaciontaller.Data.model.CartProduct
 import com.example.aplicaciontaller.Data.model.Product
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import com.example.aplicaciontaller.Data.model.CartItem
 
 @Composable
 fun ProductCardHome(
     product: Product,
-    onAddClick:() -> Unit
-){
-    Card(modifier = Modifier.width(180.dp)
-        .padding(8.dp),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
-    ){
-        Column(
-            modifier = Modifier.padding(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(painter = painterResource(id = product.image),
-                contentDescription = product.name,
-                modifier = Modifier.size(100.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                contentScale = ContentScale.Crop)
-            spaceV(8)
-            Text(
-                text = product.name,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-                modifier = Modifier.align(Alignment.Start)
-            )
-            Text(
-                text = buildAnnotatedString {
-                    withStyle(style= SpanStyle(color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)){
-                        append("$${String.format("%,.2f", product.price)}")
-                    }
-                    if (product.measure.isNotBlank() && product.measure.lowercase() != "unidad") {
-                        withStyle(style = SpanStyle(color = Color.Gray)){
-                            append("/${product.measure}")
-                        }
-                    }
-                },
-                fontSize = 14.sp,
-                modifier = Modifier.align(Alignment.Start)
-            )
-            spaceV(8)
-            Button(
-                onClick = onAddClick,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(8.dp)
+    onAddClick: () -> Unit,
+    onFavoriteClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .width(220.dp)
+            .height(350.dp), // Fixed height for all cards
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(6.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp) // Fixed image container height
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Text("Agregar")
+                Image(
+                    painter = painterResource(id = product.image),
+                    contentDescription = product.name,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
+                // Favorite Button
+                IconButton(
+                    onClick = onFavoriteClick,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(4.dp)
+                        .background(Color.White.copy(alpha = 0.7f), CircleShape)
+                        .size(36.dp)
+                ) {
+                    Icon(
+                        imageVector = if (product.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = "Favorito",
+                        tint = if (product.isFavorite) MaterialTheme.colorScheme.tertiary else Color.Gray,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Text(
+                        text = product.name,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 17.sp,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 2
+                    )
+                    spaceV(4)
+                    Text(
+                        text = "$${String.format("%,.2f", product.price)}",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+                
+                Spacer(modifier = Modifier.weight(1f))
+                
+                Button(
+                    onClick = onAddClick,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Text("Agregar al carrito", fontWeight = FontWeight.Bold)
+                }
             }
         }
     }
@@ -97,72 +134,109 @@ fun ProductCardHome(
 @Composable
 fun CartProductCard(
     cartProduct: CartProduct,
-    onIncrese:() -> Unit,
+    onIncrese: () -> Unit,
     onDelete: () -> Unit
-){
+) {
     var showDialog by remember { mutableStateOf(false) }
 
-    if(showDialog){
+    if (showDialog) {
         AlertDialog(
-            onDismissRequest = {showDialog=false},
-            title = {Text("Eliminar vehículo")},
-            text = {Text("¿Estás seguro de eliminar este vehículo del carrito?")},
+            onDismissRequest = { showDialog = false },
+            title = { Text("Eliminar vehículo") },
+            text = { Text("¿Estás seguro de eliminar este vehículo de la cotización?") },
             confirmButton = {
                 TextButton(onClick = {
-                    showDialog=false
+                    showDialog = false
                     onDelete()
                 }) {
-                    Text("Eliminar", color = Color.Red)
+                    Text("Eliminar", color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
-                TextButton(onClick = {showDialog=false}) {
+                TextButton(onClick = { showDialog = false }) {
                     Text("Cancelar")
                 }
-        }
+            }
         )
     }
     Card(
-        modifier = Modifier.fillMaxWidth()
-            .padding(vertical = 4.dp),
-        shape = RoundedCornerShape(8.dp),
-        elevation = CardDefaults.cardElevation(2.dp)
-    ){
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
         Row(
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier
+                .padding(12.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id=cartProduct.productId.image),
-                contentDescription = cartProduct.productId.name,
-                modifier = Modifier.size(80.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                contentScale = ContentScale.Crop
-            )
+            Box(
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+                    .padding(8.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = cartProduct.productId.image),
+                    contentDescription = cartProduct.productId.name,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
+            }
+            
             spaceH(12)
+            
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = cartProduct.productId.name,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
+                spaceV(4)
                 Text(
-                    text = "$${String.format("%,.2f",cartProduct.productId.price)}",
+                    text = "$${String.format("%,.2f", cartProduct.productId.price)}",
                     color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
                 )
             }
-            Text(
-                text = "x${cartProduct.quantity}",
-                fontSize = 16.sp,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-            IconButton(onClick = onIncrese) {
-                Icon(Icons.Default.Add, contentDescription = "Aumentar")
-            }
-            IconButton(onClick = {showDialog=true}) {
-                Icon(Icons.Default.Delete, contentDescription = "Eliminar producto")
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                IconButton(
+                    onClick = { showDialog = true },
+                    modifier = Modifier.size(32.dp)
+                ) {
+                    Icon(
+                        Icons.Default.Delete,
+                        contentDescription = "Eliminar",
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
+                Text(
+                    text = "${cartProduct.quantity}",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 12.dp)
+                )
+                IconButton(
+                    onClick = onIncrese,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+                ) {
+                    Icon(
+                        Icons.Default.Add,
+                        contentDescription = "Aumentar",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         }
     }

@@ -1,99 +1,110 @@
 package com.example.aplicaciontaller.Components
 
-import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsEndWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.aplicaciontaller.R
-import com.example.aplicaciontaller.ui.theme.Green1
-import com.example.aplicaciontaller.ui.theme.ultra_l_blue
 
 @Composable
-fun CardViewHome(title: String,description: String, buttonText: String, image: Int){
+fun CardViewHome(title: String, description: String, buttonText: String, image: Int) {
     ElevatedCard(
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
-        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 12.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight(),
-        colors = CardDefaults.cardColors(
-            containerColor = Green1
-        )
+            .wrapContentHeight()
+            .clip(RoundedCornerShape(24.dp)),
     ) {
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(IntrinsicSize.Min),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Column(
-                modifier = Modifier
-                    .weight(0.58f)
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = title,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
-                spaceV(8)
-                Text(
-                    text= description,
-                    fontSize = 20.sp,
-                    color = Color.White
-                )
-                spaceV(12)
-                ElevatedButton(
-                    onClick = {},
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.White
+                .height(200.dp)
+                .background(
+                    Brush.linearGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.primary,
+                            MaterialTheme.colorScheme.secondary,
+                            MaterialTheme.colorScheme.tertiary
+                        )
                     )
+                )
+        ) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    modifier = Modifier
+                        .weight(0.55f)
+                        .padding(20.dp)
                 ) {
                     Text(
-                        text = buttonText,
-                        color = Green1
+                        text = title,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        lineHeight = 26.sp
                     )
+                    spaceV(8)
+                    Text(
+                        text = description,
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f)
+                    )
+                    spaceV(16)
+                    ElevatedButton(
+                        onClick = {},
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.surface
+                        ),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(
+                            text = buttonText,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
+                Image(
+                    painter = painterResource(id = image),
+                    contentDescription = stringResource(id = R.string.autos),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(0.45f)
+                        .padding(end = 12.dp, bottom = 12.dp),
+                    contentScale = ContentScale.Fit
+                )
             }
-            Image(
-                painter = painterResource(id = image),
-                contentDescription = stringResource(
-                    id = R.string.autos
-                ),
-                modifier = Modifier
-                    .height(120.dp)
-                    .weight(0.42f),
-                contentScale = ContentScale.FillHeight
-            )
         }
     }
 }
@@ -103,56 +114,43 @@ fun cardCategoryHome(
     categoria: String,
     imagen: Int,
     color: Color
-){
-    ElevatedCard(
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
-        ),
-        modifier = Modifier.wrapContentHeight()
-            .wrapContentWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = color
-        )
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.wrapContentWidth()
     ) {
-        Column(
-            modifier = Modifier.padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Box(
+            modifier = Modifier
+                .width(80.dp)
+                .height(80.dp)
+                .clip(RoundedCornerShape(40.dp))
+                .background(color)
+                .padding(12.dp),
+            contentAlignment = Alignment.Center
         ) {
-            Image(painter = painterResource(id=imagen),
+            Image(
+                painter = painterResource(id = imagen),
                 contentDescription = stringResource(R.string.category_description),
-                modifier = Modifier.height(56.dp),
-                contentScale = ContentScale.Fit)
-            spaceV(8)
-            Text(
-                text=categoria,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                fontSize = 12.sp
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Fit
             )
         }
+        spaceV(8)
+        Text(
+            text = categoria,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = 13.sp
+        )
     }
-}
-@Composable
-fun spaceV(space: Int){
-    Spacer(
-        Modifier.height(space.dp)
-    )
 }
 
 @Composable
-fun spaceH(space: Int){
-    Spacer(
-        modifier = Modifier.width(space.dp)
-    )
+fun spaceV(space: Int) {
+    Spacer(modifier = Modifier.height(space.dp))
 }
-@Preview
+
 @Composable
-fun cardViewPreview(){
-//    CardViewHome(
-//        "Encuentra tu auto ideal",
-//        "Hasta 24 meses sin intereses",
-//        stringResource(R.string.texto_boton),
-//        R.drawable.auto_banner
-//    )
-    cardCategoryHome("Camionetas", R.drawable.camioneta, ultra_l_blue)
+fun spaceH(space: Int) {
+    Spacer(modifier = Modifier.width(space.dp))
 }

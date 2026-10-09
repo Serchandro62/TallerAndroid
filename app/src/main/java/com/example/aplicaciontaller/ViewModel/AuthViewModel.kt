@@ -91,6 +91,10 @@ class AuthViewModel : ViewModel(){
                 }
             }
     }
+    fun getCurrentUserEmail(): String {
+        return auth?.currentUser?.email ?: "usuario@concesionaria.com"
+    }
+
     fun clearError(){
         errorMessage= null
     }

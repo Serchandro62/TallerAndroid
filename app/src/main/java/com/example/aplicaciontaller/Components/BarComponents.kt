@@ -1,5 +1,6 @@
 package com.example.aplicaciontaller.Components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,12 +17,10 @@ import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collection.mutableVectorOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.example.aplicaciontaller.ui.theme.Green1
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -31,21 +30,29 @@ import com.example.aplicaciontaller.R
 
 @Composable
 fun Title(text:String){
-    Text(text=text, fontSize=25.sp, color = Green1, fontWeight = FontWeight.Bold)
+    Text(
+        text=text,
+        fontSize=28.sp,
+        color = MaterialTheme.colorScheme.primary,
+        fontWeight = FontWeight.ExtraBold,
+        letterSpacing = 1.sp
+    )
 }
 
 @Composable
 fun CartButton(onClick: () -> Unit = {}) {
     FloatingActionButton(
         onClick = onClick,
-        containerColor = MaterialTheme.colorScheme.primary
+        containerColor = MaterialTheme.colorScheme.tertiary,
+        contentColor = MaterialTheme.colorScheme.onPrimary
     ) {
         Icon(
             painter = painterResource(R.drawable.outline_shopping_cart_24),
-            contentDescription = "Ir al carrito"
+            contentDescription = "Ver cotización"
         )
     }
 }
+
 @Composable
 fun MainScaffold(
     selectedItem:Int,
@@ -56,9 +63,9 @@ fun MainScaffold(
     content: @Composable (PaddingValues) -> Unit
 ){
     Scaffold(
-        topBar=topBar,
+        topBar = topBar,
         bottomBar = {
-            if(showBottomBar){
+            if (showBottomBar) {
                 BottomMenu(
                     selectedItem = selectedItem,
                     onItemSelected = onItemSelected
@@ -66,86 +73,64 @@ fun MainScaffold(
             }
         },
         floatingActionButton = floatingActionButton,
-        content = content
+        content = { innerPadding ->
+            content(innerPadding)
+        }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBarComponent(){
-    //Almacenar texto escrito
     var query by remember { mutableStateOf("") }
-    //Indicar si la barra de busqueda está activa
     var activa by remember { mutableStateOf(false) }
+    
     SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
                 query = query,
-
-                //Actualizar cada que el usuario escriba
-                onQueryChange = {
-                    query = it
-                },
-                //Se ejecuta cuando el usuario realiza una búsqueda
-                onSearch = {
-                    activa = false
-                },
-                expanded=activa,
-                onExpandedChange = {
-                    activa = it
-                },
-                //Texto de fondo
+                onQueryChange = { query = it },
+                onSearch = { activa = false },
+                expanded = activa,
+                onExpandedChange = { activa = it },
                 placeholder = {
-                    Text("Buscar vehículos...")
+                    Text("Buscar vehículos...", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
                 },
-                //definir icono
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Search,
-                        contentDescription = "Buscar"
+                        contentDescription = "Buscar",
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 },
-                //Icono para cerrar la búsqueda
                 trailingIcon = {
-                    if(activa){
+                    if (activa) {
                         IconButton(
                             onClick = {
-                                if(query.isNotEmpty()){
-                                    query=""
-                                }else{
-                                    activa=false
-                                }
+                                if (query.isNotEmpty()) query = "" else activa = false
                             }
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Close,
-                                contentDescription="Cerrar"
+                                contentDescription = "Cerrar",
+                                tint = MaterialTheme.colorScheme.error
                             )
                         }
                     }
                 }
             )
         },
-        //Estado de expansión
-        expanded=activa,
-
-        onExpandedChange = {
-            activa = it
-        },
-
+        expanded = activa,
+        onExpandedChange = { activa = it },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                horizontal = 16.dp,
-                vertical = 8.dp
-            ),
-        //Forma de la barra
-        shape = SearchBarDefaults.inputFieldShape,
-        //Elevacion
-        tonalElevation = SearchBarDefaults.TonalElevation,
-        shadowElevation = SearchBarDefaults.ShadowElevation,
-
-        //Contenido con la barra expandida.
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        shape = MaterialTheme.shapes.extraLarge,
+        colors = SearchBarDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+        ),
+        tonalElevation = 0.dp,
+        shadowElevation = 4.dp,
         content = {
             Text(
                 text = "Buscando: $query",
